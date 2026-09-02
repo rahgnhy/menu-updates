@@ -38,8 +38,8 @@ try:
 except: _missing.append("rich")
 
 if _missing:
-    print(f"[!] missing: {', '.join(_missing)}")
-    print("    pip install requests rich python-whois dnspython")
+    print(f"[!] missing : {', '.join(_missing)}")
+    print("  please install requirments.txt")
     sys.exit(1)
 
 # ══════════════════════════════════════════════════════════════════════════════
