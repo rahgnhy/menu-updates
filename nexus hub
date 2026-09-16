@@ -1,6 +1,5 @@
-
 --[[
-    NEXUS SUITE v5
+    NEXUS SUITE v6
     made by sside
 ]]
 
@@ -15,9 +14,6 @@ local LocalPlayer   = Players.LocalPlayer
 local GUIParent = CoreGui
 pcall(function() if gethui then GUIParent = gethui() end end)
 
---// ============================================================
---// CONFIG
---// ============================================================
 local Config = {
     SilentAim = {
         Enabled = false, Key = Enum.KeyCode.E, FOV = 120, FOVVisible = true,
@@ -36,46 +32,38 @@ do
     rayParams.FilterType = ok and ft or Enum.RaycastFilterType.Blacklist
 end
 
---// ============================================================
---// PALETTE — purple focused
---// ============================================================
 local P = {
-    Bg         = Color3.fromRGB(11, 9, 17),
     Panel      = Color3.fromRGB(16, 13, 24),
     PanelAlt   = Color3.fromRGB(22, 18, 33),
     PanelDeep  = Color3.fromRGB(12, 10, 19),
-    Hover      = Color3.fromRGB(34, 27, 50),
     Stroke     = Color3.fromRGB(48, 38, 72),
     StrokeSoft = Color3.fromRGB(32, 25, 48),
-    -- Purple shades only for logo
     Purple1    = Color3.fromRGB(168, 105, 255),
     Purple2    = Color3.fromRGB(120, 62, 235),
     Purple3    = Color3.fromRGB(88, 42, 190),
-    -- Accent
     Accent     = Color3.fromRGB(150, 88, 255),
     AccentSoft = Color3.fromRGB(180, 130, 255),
-    -- Text
     Text       = Color3.fromRGB(238, 232, 252),
     TextMuted  = Color3.fromRGB(140, 130, 170),
     TextDim    = Color3.fromRGB(90, 82, 118),
     Danger     = Color3.fromRGB(255, 85, 110),
     Success    = Color3.fromRGB(110, 230, 140),
     Warn       = Color3.fromRGB(255, 200, 90),
+    SwitchOff  = Color3.fromRGB(45, 38, 62),
 }
 
 --// ============================================================
---// UI LIBRARY v5
+--// UI
 --// ============================================================
 local UI = {}
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "NexusUI_v5"
+ScreenGui.Name = "NexusUI_v6"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = GUIParent
 
--- Main window ---------------------------------------------------
 local Main = Instance.new("Frame")
 Main.Name = "Main"
 Main.Size = UDim2.new(0, 740, 0, 480)
@@ -110,7 +98,7 @@ OuterGlow.Position = UDim2.new(0, -30, 0, -30)
 OuterGlow.ZIndex = -1
 OuterGlow.Parent = Main
 
--- Top bar -------------------------------------------------------
+-- Top bar
 local TopBar = Instance.new("Frame")
 TopBar.Size = UDim2.new(1, 0, 0, 50)
 TopBar.BackgroundColor3 = P.PanelAlt
@@ -132,7 +120,7 @@ TopLine.BackgroundColor3 = P.StrokeSoft
 TopLine.BorderSizePixel = 0
 TopLine.Parent = TopBar
 
--- Logo — pure purple ---------------------------------------------
+-- Logo
 local LogoBox = Instance.new("Frame")
 LogoBox.Size = UDim2.new(0, 32, 0, 32)
 LogoBox.Position = UDim2.new(0, 16, 0.5, -16)
@@ -169,16 +157,11 @@ LogoLetter.BackgroundTransparency = 1
 LogoLetter.Size = UDim2.new(1, 0, 1, 0)
 LogoLetter.Parent = LogoBox
 
--- Pulses
 task.spawn(function()
     while LogoGlow.Parent do
-        TweenService:Create(LogoGlow, TweenInfo.new(1.4, Enum.EasingStyle.Sine), {
-            ImageTransparency = 0.35
-        }):Play()
+        TweenService:Create(LogoGlow, TweenInfo.new(1.4, Enum.EasingStyle.Sine), {ImageTransparency = 0.35}):Play()
         task.wait(1.4)
-        TweenService:Create(LogoGlow, TweenInfo.new(1.4, Enum.EasingStyle.Sine), {
-            ImageTransparency = 0.7
-        }):Play()
+        TweenService:Create(LogoGlow, TweenInfo.new(1.4, Enum.EasingStyle.Sine), {ImageTransparency = 0.7}):Play()
         task.wait(1.4)
     end
 end)
@@ -194,7 +177,6 @@ Title.Size = UDim2.new(0, 90, 1, 0)
 Title.Position = UDim2.new(0, 58, 0, 0)
 Title.Parent = TopBar
 
--- Status pulse dot
 local StatusDot = Instance.new("Frame")
 StatusDot.Size = UDim2.new(0, 6, 0, 6)
 StatusDot.Position = UDim2.new(0, 148, 0.5, -3)
@@ -213,7 +195,7 @@ task.spawn(function()
 end)
 
 local SubTitle = Instance.new("TextLabel")
-SubTitle.Text = "v5"
+SubTitle.Text = "v6"
 SubTitle.Font = Enum.Font.GothamMedium
 SubTitle.TextSize = 10
 SubTitle.TextColor3 = P.TextDim
@@ -223,7 +205,6 @@ SubTitle.Size = UDim2.new(0, 60, 1, 0)
 SubTitle.Position = UDim2.new(0, 158, 0, 0)
 SubTitle.Parent = TopBar
 
--- FPS
 local FpsLabel = Instance.new("TextLabel")
 FpsLabel.Text = "—"
 FpsLabel.Font = Enum.Font.GothamBold
@@ -235,7 +216,6 @@ FpsLabel.Size = UDim2.new(0, 70, 1, 0)
 FpsLabel.Position = UDim2.new(1, -168, 0, 0)
 FpsLabel.Parent = TopBar
 
--- Window buttons
 local function makeWinBtn(text, xOff, hoverBg, onClick)
     local b = Instance.new("TextButton")
     b.Size = UDim2.new(0, 30, 0, 30)
@@ -250,20 +230,16 @@ local function makeWinBtn(text, xOff, hoverBg, onClick)
     Instance.new("UICorner", b).CornerRadius = UDim.new(1, 0)
 
     b.MouseEnter:Connect(function()
-        TweenService:Create(b, TweenInfo.new(0.15), {
-            BackgroundColor3 = hoverBg, TextColor3 = Color3.new(1, 1, 1)
-        }):Play()
+        TweenService:Create(b, TweenInfo.new(0.15), {BackgroundColor3 = hoverBg, TextColor3 = Color3.new(1, 1, 1)}):Play()
     end)
     b.MouseLeave:Connect(function()
-        TweenService:Create(b, TweenInfo.new(0.15), {
-            BackgroundColor3 = Color3.fromRGB(30, 24, 44), TextColor3 = P.TextMuted
-        }):Play()
+        TweenService:Create(b, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(30, 24, 44), TextColor3 = P.TextMuted}):Play()
     end)
     b.MouseButton1Click:Connect(onClick)
     return b
 end
 
--- Minimize icon (floating square) -------------------------------
+-- Minimize icon
 local MinIcon = Instance.new("TextButton")
 MinIcon.Name = "MinIcon"
 MinIcon.Size = UDim2.new(0, 58, 0, 58)
@@ -312,7 +288,6 @@ MinIcon.MouseLeave:Connect(function()
     TweenService:Create(MinIconStroke, TweenInfo.new(0.15), {Transparency = 0.2}):Play()
 end)
 
--- Icon drag vs click
 do
     local iconDragging, iconDidDrag, iconStart, iconPos
     MinIcon.InputBegan:Connect(function(inp)
@@ -343,24 +318,18 @@ do
                 Main.Position = UDim2.new(0.5, -370, 0.5, -240)
                 Main.BackgroundTransparency = 1
                 MainStroke.Transparency = 1
-                TweenService:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quad), {
-                    BackgroundTransparency = 0
-                }):Play()
-                TweenService:Create(MainStroke, TweenInfo.new(0.25), {
-                    Transparency = 0.15
-                }):Play()
+                TweenService:Create(Main, TweenInfo.new(0.25, Enum.EasingStyle.Quad), {BackgroundTransparency = 0}):Play()
+                TweenService:Create(MainStroke, TweenInfo.new(0.25), {Transparency = 0.15}):Play()
             end
         end
     end)
 end
 
--- Minimize button
 makeWinBtn("–", -76, Color3.fromRGB(60, 48, 88), function()
     Main.Visible = false
     MinIcon.Visible = true
 end)
 
--- Close button
 makeWinBtn("×", -42, P.Danger, function()
     TweenService:Create(Main, TweenInfo.new(0.22, Enum.EasingStyle.Quad), {
         Size = UDim2.new(0, 0, 0, 0),
@@ -378,7 +347,6 @@ UIS.InputBegan:Connect(function(inp, gpe)
     end
 end)
 
--- Drag --------------------------------------------------------
 do
     local dragging, dragStart, startPos
     TopBar.InputBegan:Connect(function(input)
@@ -399,14 +367,12 @@ do
     end)
 end
 
--- Body --------------------------------------------------------
 local Body = Instance.new("Frame")
 Body.Size = UDim2.new(1, 0, 1, -50)
 Body.Position = UDim2.new(0, 0, 0, 50)
 Body.BackgroundTransparency = 1
 Body.Parent = Main
 
--- Sidebar -----------------------------------------------------
 local Sidebar = Instance.new("Frame")
 Sidebar.Size = UDim2.new(0, 205, 1, 0)
 Sidebar.BackgroundColor3 = P.PanelDeep
@@ -421,7 +387,6 @@ SidebarLine.BackgroundColor3 = P.StrokeSoft
 SidebarLine.BorderSizePixel = 0
 SidebarLine.Parent = Sidebar
 
--- User card
 local UserCard = Instance.new("Frame")
 UserCard.Size = UDim2.new(1, -22, 0, 58)
 UserCard.Position = UDim2.new(0, 11, 0, 14)
@@ -478,9 +443,8 @@ UserTag.Size = UDim2.new(1, -60, 0, 14)
 UserTag.Position = UDim2.new(0, 57, 0, 32)
 UserTag.Parent = UserCard
 
--- Tab holder
 local TabHolder = Instance.new("ScrollingFrame")
-TabHolder.Size = UDim2.new(1, 0, 1, -108)
+TabHolder.Size = UDim2.new(1, 0, 1, -150)
 TabHolder.Position = UDim2.new(0, 0, 0, 84)
 TabHolder.BackgroundTransparency = 1
 TabHolder.BorderSizePixel = 0
@@ -495,10 +459,9 @@ TabPad.PaddingTop = UDim.new(0, 4)
 TabPad.PaddingLeft = UDim.new(0, 11)
 TabPad.PaddingRight = UDim.new(0, 11)
 
--- Active features counter
 local ActiveCounter = Instance.new("Frame")
 ActiveCounter.Size = UDim2.new(1, -22, 0, 30)
-ActiveCounter.Position = UDim2.new(0, 11, 1, -44)
+ActiveCounter.Position = UDim2.new(0, 11, 1, -70)
 ActiveCounter.BackgroundColor3 = P.PanelAlt
 ActiveCounter.Parent = Sidebar
 Instance.new("UICorner", ActiveCounter).CornerRadius = UDim.new(0, 10)
@@ -521,6 +484,16 @@ ActiveText.Size = UDim2.new(1, -30, 1, 0)
 ActiveText.Position = UDim2.new(0, 24, 0, 0)
 ActiveText.Parent = ActiveCounter
 
+local Footer = Instance.new("TextLabel")
+Footer.Text = "made by sside"
+Footer.Font = Enum.Font.GothamMedium
+Footer.TextSize = 10
+Footer.TextColor3 = P.TextDim
+Footer.BackgroundTransparency = 1
+Footer.Size = UDim2.new(1, 0, 0, 16)
+Footer.Position = UDim2.new(0, 0, 1, -22)
+Footer.Parent = Sidebar
+
 local function refreshActiveCounter()
     local n = 0
     if Config.ESP.Enabled then n = n + 1 end
@@ -530,18 +503,6 @@ local function refreshActiveCounter()
 end
 refreshActiveCounter()
 
--- Footer
-local Footer = Instance.new("TextLabel")
-Footer.Text = "made by sside"
-Footer.Font = Enum.Font.GothamMedium
-Footer.TextSize = 10
-Footer.TextColor3 = P.TextDim
-Footer.BackgroundTransparency = 1
-Footer.Size = UDim2.new(1, 0, 0, 16)
-Footer.Position = UDim2.new(0, 0, 1, -18)
-Footer.Parent = Sidebar
-
--- Content -----------------------------------------------------
 local Content = Instance.new("Frame")
 Content.Size = UDim2.new(1, -205, 1, 0)
 Content.Position = UDim2.new(0, 205, 0, 0)
@@ -589,9 +550,6 @@ PagesFrame.Position = UDim2.new(0, 0, 0, 64)
 PagesFrame.BackgroundTransparency = 1
 PagesFrame.Parent = Content
 
--- ================================================================
--- Tab creation
--- ================================================================
 local allElements = {}
 
 function UI:CreateTab(name, icon)
@@ -727,6 +685,9 @@ function UI:CreateTab(name, icon)
         return D
     end
 
+    -- ============================================================
+    -- FIXED TOGGLE — plain BackgroundColor3, reliable click catcher
+    -- ============================================================
     function Elements:Toggle(text, default, callback)
         local Holder = Instance.new("Frame")
         Holder.Name = "Toggle_" .. text
@@ -748,54 +709,52 @@ function UI:CreateTab(name, icon)
         Label2.TextXAlignment = Enum.TextXAlignment.Left
         Label2.Size = UDim2.new(0.7, 0, 1, 0)
         Label2.Position = UDim2.new(0, 16, 0, 0)
+        Label2.ZIndex = 1
         Label2.Parent = Holder
 
+        -- Switch bg — plain frame, no gradient
         local Switch = Instance.new("Frame")
         Switch.Size = UDim2.new(0, 42, 0, 24)
         Switch.Position = UDim2.new(1, -58, 0.5, -12)
-        Switch.BackgroundColor3 = default and P.Accent or Color3.fromRGB(45, 38, 62)
+        Switch.BackgroundColor3 = default and P.Accent or P.SwitchOff
+        Switch.ZIndex = 1
         Switch.Parent = Holder
         Instance.new("UICorner", Switch).CornerRadius = UDim.new(1, 0)
-
-        local SwitchGrad = Instance.new("UIGradient", Switch)
-        SwitchGrad.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, P.Purple1),
-            ColorSequenceKeypoint.new(1, P.Purple2),
-        }
-        SwitchGrad.Rotation = 45
-        SwitchGrad.Transparency = NumberSequence.new{
-            NumberSequenceKeypoint.new(0, default and 0 or 1),
-            NumberSequenceKeypoint.new(1, default and 0 or 1),
-        }
 
         local Dot = Instance.new("Frame")
         Dot.Size = UDim2.new(0, 20, 0, 20)
         Dot.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
         Dot.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dot.ZIndex = 2
         Dot.Parent = Switch
         Instance.new("UICorner", Dot).CornerRadius = UDim.new(1, 0)
+
+        -- Transparent TextButton overlay — catches every click on the row
+        local Click = Instance.new("TextButton")
+        Click.Size = UDim2.new(1, 0, 1, 0)
+        Click.BackgroundTransparency = 1
+        Click.Text = ""
+        Click.TextTransparency = 1
+        Click.AutoButtonColor = false
+        Click.ZIndex = 10
+        Click.Parent = Holder
 
         local state = default
         local function set(v)
             state = v
-            TweenService:Create(Switch, TweenInfo.new(0.2), {
-                BackgroundColor3 = state and P.Accent or Color3.fromRGB(45, 38, 62)
+            TweenService:Create(Switch, TweenInfo.new(0.18), {
+                BackgroundColor3 = state and P.Accent or P.SwitchOff
             }):Play()
-            TweenService:Create(SwitchGrad, TweenInfo.new(0.2), {
-                Transparency = NumberSequence.new{
-                    NumberSequenceKeypoint.new(0, state and 0 or 1),
-                    NumberSequenceKeypoint.new(1, state and 0 or 1),
-                }
-            }):Play()
-            TweenService:Create(Dot, TweenInfo.new(0.24, Enum.EasingStyle.Back), {
+            TweenService:Create(Dot, TweenInfo.new(0.22, Enum.EasingStyle.Back), {
                 Position = state and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
             }):Play()
-            callback(state)
+            if callback then callback(state) end
         end
 
-        Holder.InputBegan:Connect(function(inp)
-            if inp.UserInputType == Enum.UserInputType.MouseButton1 then set(not state) end
+        Click.MouseButton1Click:Connect(function()
+            set(not state)
         end)
+
         Holder.MouseEnter:Connect(function()
             TweenService:Create(HolderStroke, TweenInfo.new(0.15), {Transparency = 0}):Play()
         end)
@@ -806,6 +765,9 @@ function UI:CreateTab(name, icon)
         return Holder
     end
 
+    -- ============================================================
+    -- SLIDER — click catcher on bar
+    -- ============================================================
     function Elements:Slider(text, min, max, default, callback)
         local Holder = Instance.new("Frame")
         Holder.Name = "Slider_" .. text
@@ -868,6 +830,16 @@ function UI:CreateTab(name, icon)
         Knob.Parent = Bar
         Instance.new("UICorner", Knob).CornerRadius = UDim.new(1, 0)
 
+        -- Wide invisible hit box over the bar
+        local Hit = Instance.new("TextButton")
+        Hit.Size = UDim2.new(1, 0, 0, 24)
+        Hit.Position = UDim2.new(0, 0, 0.5, -12)
+        Hit.BackgroundTransparency = 1
+        Hit.Text = ""
+        Hit.AutoButtonColor = false
+        Hit.ZIndex = 10
+        Hit.Parent = Bar
+
         local dragging = false
         local function updateFromX(x)
             local rel = math.clamp((x - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X, 0, 1)
@@ -878,11 +850,9 @@ function UI:CreateTab(name, icon)
             callback(val)
         end
 
-        Bar.InputBegan:Connect(function(inp)
-            if inp.UserInputType == Enum.UserInputType.MouseButton1 then
-                dragging = true
-                updateFromX(inp.Position.X)
-            end
+        Hit.MouseButton1Down:Connect(function()
+            dragging = true
+            updateFromX(UIS:GetMouseLocation().X)
         end)
         UIS.InputEnded:Connect(function(inp)
             if inp.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
@@ -995,7 +965,6 @@ function UI:CreateTab(name, icon)
     return Elements
 end
 
--- Search filter
 SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
     local q = SearchBox.Text:lower()
     for _, entry in ipairs(allElements) do
@@ -1003,7 +972,6 @@ SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
     end
 end)
 
--- FPS counter with color coding
 do
     local frames, timeAcc = 0, tick()
     RunService.RenderStepped:Connect(function()
@@ -1078,10 +1046,7 @@ InfoStatus.Position = UDim2.new(0, 14, 0, 68)
 InfoStatus.Parent = InfoCard
 
 function UI:UpdateTargetCard(player)
-    if not player or not player.Character then
-        InfoCard.Visible = false
-        return
-    end
+    if not player or not player.Character then InfoCard.Visible = false; return end
     local hum = player.Character:FindFirstChildOfClass("Humanoid")
     local hrp = player.Character:FindFirstChild("HumanoidRootPart")
     local cam = workspace.CurrentCamera
@@ -1174,9 +1139,6 @@ local function getClosestTarget(fov)
     return best
 end
 
---// ============================================================
---// SILENT AIM HOOK
---// ============================================================
 pcall(function()
     local mt = getrawmetatable(game)
     local oldNamecall = mt.__namecall
@@ -1218,9 +1180,6 @@ RunService.RenderStepped:Connect(function()
     UI:UpdateTargetCard(Config.Target)
 end)
 
---// ============================================================
---// FOV CIRCLE
---// ============================================================
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Thickness = 1.5
 FOVCircle.Color = P.Accent
@@ -1241,117 +1200,94 @@ RunService.RenderStepped:Connect(function()
 end)
 
 --// ============================================================
---// ESP — Skeleton / Health / Name / Distance / Fade
+--// ESP
 --// ============================================================
 local ESPData = {}
 local FADE_SPEED = 10
 
 local R15_CONN = {
-    {"Head", "UpperTorso"},
-    {"UpperTorso", "LowerTorso"},
-    {"UpperTorso", "LeftUpperArm"},
-    {"LeftUpperArm", "LeftLowerArm"},
-    {"LeftLowerArm", "LeftHand"},
-    {"UpperTorso", "RightUpperArm"},
-    {"RightUpperArm", "RightLowerArm"},
-    {"RightLowerArm", "RightHand"},
-    {"LowerTorso", "LeftUpperLeg"},
-    {"LeftUpperLeg", "LeftLowerLeg"},
-    {"LeftLowerLeg", "LeftFoot"},
-    {"LowerTorso", "RightUpperLeg"},
-    {"RightUpperLeg", "RightLowerLeg"},
-    {"RightLowerLeg", "RightFoot"},
+    {"Head", "UpperTorso"}, {"UpperTorso", "LowerTorso"},
+    {"UpperTorso", "LeftUpperArm"}, {"LeftUpperArm", "LeftLowerArm"}, {"LeftLowerArm", "LeftHand"},
+    {"UpperTorso", "RightUpperArm"}, {"RightUpperArm", "RightLowerArm"}, {"RightLowerArm", "RightHand"},
+    {"LowerTorso", "LeftUpperLeg"}, {"LeftUpperLeg", "LeftLowerLeg"}, {"LeftLowerLeg", "LeftFoot"},
+    {"LowerTorso", "RightUpperLeg"}, {"RightUpperLeg", "RightLowerLeg"}, {"RightLowerLeg", "RightFoot"},
 }
 
+-- R6 with both naming conventions (classic "Left Arm", newer "LeftArm")
 local R6_CONN = {
-    {"Head", "Torso"},
-    {"Torso", "Left Arm"},
-    {"Torso", "Right Arm"},
-    {"Torso", "Left Leg"},
-    {"Torso", "Right Leg"},
+    {{"Head", "Head"}, {"Torso", "Torso"}},
+    {{"Torso", "Torso"}, {"Left Arm", "LeftArm"}},
+    {{"Torso", "Torso"}, {"Right Arm", "RightArm"}},
+    {{"Torso", "Torso"}, {"Left Leg", "LeftLeg"}},
+    {{"Torso", "Torso"}, {"Right Leg", "RightLeg"}},
 }
 
 local MAX_LINES = #R15_CONN
 
+local function resolveBone(char, names)
+    if type(names) == "string" then
+        return char:FindFirstChild(names)
+    end
+    for _, n in ipairs(names) do
+        local p = char:FindFirstChild(n)
+        if p then return p end
+    end
+    return nil
+end
+
+local function rectOverlap(ax, ay, aw, ah, bx, by, bw, bh)
+    return not (ax + aw < bx or ax > bx + bw or ay + ah < by or ay > by + bh)
+end
+
+local function textBounds(cx, y, text, size)
+    local w = #text * size * 0.52
+    return cx - w / 2, y, w, size + 2
+end
+
 local function createESP(player)
     local d = {
-        box        = Drawing.new("Square"),
-        boxGlow    = Drawing.new("Square"),
-        name       = Drawing.new("Text"),
-        dist       = Drawing.new("Text"),
-        head       = Drawing.new("Circle"),
-        healthBG   = Drawing.new("Square"),
-        healthFill = Drawing.new("Square"),
-        skeleton   = {},
-        alpha      = 0,
-        mode       = nil,
+        box = Drawing.new("Square"), boxGlow = Drawing.new("Square"),
+        name = Drawing.new("Text"), dist = Drawing.new("Text"),
+        head = Drawing.new("Circle"),
+        healthBG = Drawing.new("Square"), healthFill = Drawing.new("Square"),
+        skeleton = {}, alpha = 0, mode = nil,
     }
-    d.box.Thickness = 1.4
-    d.box.Filled = false
-    d.box.Color = P.Accent
+    d.box.Thickness = 1.4; d.box.Filled = false; d.box.Color = P.Accent
+    d.boxGlow.Thickness = 5; d.boxGlow.Filled = false; d.boxGlow.Color = P.Accent; d.boxGlow.Transparency = 0.2
 
-    d.boxGlow.Thickness = 5
-    d.boxGlow.Filled = false
-    d.boxGlow.Color = P.Accent
-    d.boxGlow.Transparency = 0.2
+    d.name.Size = 11; d.name.Center = true; d.name.Outline = true
+    d.name.OutlineColor = Color3.new(0, 0, 0); d.name.Color = Color3.new(1, 1, 1)
 
-    d.name.Size = 11
-    d.name.Center = true
-    d.name.Outline = true
-    d.name.OutlineColor = Color3.new(0, 0, 0)
-    d.name.Color = Color3.new(1, 1, 1)
+    d.dist.Size = 10; d.dist.Center = true; d.dist.Outline = true
+    d.dist.OutlineColor = Color3.new(0, 0, 0); d.dist.Color = Color3.fromRGB(220, 214, 240)
 
-    d.dist.Size = 10
-    d.dist.Center = true
-    d.dist.Outline = true
-    d.dist.OutlineColor = Color3.new(0, 0, 0)
-    d.dist.Color = Color3.fromRGB(220, 214, 240)
+    d.head.Thickness = 1.4; d.head.Filled = false; d.head.Color = P.Accent
+    d.head.NumSides = 24; d.head.Visible = false
 
-    d.head.Thickness = 1.4
-    d.head.Filled = false
-    d.head.Color = P.Accent
-    d.head.NumSides = 24
-    d.head.Visible = false
-
-    d.healthBG.Filled = true
-    d.healthBG.Color = Color3.fromRGB(18, 14, 26)
-
-    d.healthFill.Filled = true
-    d.healthFill.Color = P.Success
+    d.healthBG.Filled = true; d.healthBG.Color = Color3.fromRGB(18, 14, 26)
+    d.healthFill.Filled = true; d.healthFill.Color = P.Success
 
     for i = 1, MAX_LINES do
         local line = Drawing.new("Line")
-        line.Thickness = 1.6
-        line.Color = P.Accent
-        line.Visible = false
+        line.Thickness = 1.6; line.Color = P.Accent; line.Visible = false
         d.skeleton[i] = line
     end
-
     ESPData[player] = d
 end
 
 local function destroyESP(player)
     local d = ESPData[player]
     if not d then return end
-    d.box:Remove()
-    d.boxGlow:Remove()
-    d.name:Remove()
-    d.dist:Remove()
-    d.head:Remove()
-    d.healthBG:Remove()
-    d.healthFill:Remove()
+    d.box:Remove(); d.boxGlow:Remove(); d.name:Remove(); d.dist:Remove()
+    d.head:Remove(); d.healthBG:Remove(); d.healthFill:Remove()
     for _, l in ipairs(d.skeleton) do l:Remove() end
     ESPData[player] = nil
 end
 
 local function hideAll(d)
-    d.box.Visible = false
-    d.boxGlow.Visible = false
-    d.name.Visible = false
-    d.dist.Visible = false
-    d.head.Visible = false
-    d.healthBG.Visible = false
-    d.healthFill.Visible = false
+    d.box.Visible = false; d.boxGlow.Visible = false
+    d.name.Visible = false; d.dist.Visible = false; d.head.Visible = false
+    d.healthBG.Visible = false; d.healthFill.Visible = false
     for _, l in ipairs(d.skeleton) do l.Visible = false end
 end
 
@@ -1376,6 +1312,18 @@ RunService.RenderStepped:Connect(function(dt)
     local espEnabled = Config.ESP.Enabled
     local fadeFactor = 1 - math.exp(-FADE_SPEED * dt)
 
+    local mx, my, mw, mh
+    if Main.Visible and Main.AbsoluteSize.X > 4 and Main.BackgroundTransparency < 0.95 then
+        mx = Main.AbsolutePosition.X
+        my = Main.AbsolutePosition.Y
+        mw = Main.AbsoluteSize.X
+        mh = Main.AbsoluteSize.Y
+    end
+    local function hitsMenu(x, y, w, h)
+        if not mx then return false end
+        return rectOverlap(x, y, w, h, mx, my, mw, mh)
+    end
+
     for player, d in pairs(ESPData) do
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
@@ -1383,7 +1331,6 @@ RunService.RenderStepped:Connect(function(dt)
 
         local canRender = espEnabled and hrp and hum and hum.Health > 0
         local pos, onScreen
-
         if canRender then
             pos, onScreen = cam:WorldToViewportPoint(hrp.Position)
             if not onScreen then canRender = false end
@@ -1391,9 +1338,7 @@ RunService.RenderStepped:Connect(function(dt)
 
         local targetAlpha = canRender and 1 or 0
         d.alpha = d.alpha + (targetAlpha - d.alpha) * fadeFactor
-        if math.abs(d.alpha - targetAlpha) < 0.005 then
-            d.alpha = targetAlpha
-        end
+        if math.abs(d.alpha - targetAlpha) < 0.005 then d.alpha = targetAlpha end
 
         if d.alpha <= 0.01 then
             hideAll(d)
@@ -1409,12 +1354,11 @@ RunService.RenderStepped:Connect(function(dt)
             local bx, by = cx - w / 2, cy - h / 2
 
             -- Box
-            if Config.ESP.Box then
+            if Config.ESP.Box and not hitsMenu(bx, by, w, h) then
                 d.box.Size = Vector2.new(w, h)
                 d.box.Position = Vector2.new(bx, by)
                 d.box.Transparency = transparency
                 d.box.Visible = true
-
                 if Config.ESP.Glow then
                     local pulse = Config.ESP.Pulse and (math.sin(t * 4) * 0.3 + 0.7) or 1
                     d.boxGlow.Size = Vector2.new(w + 6, h + 6)
@@ -1429,26 +1373,66 @@ RunService.RenderStepped:Connect(function(dt)
                 d.boxGlow.Visible = false
             end
 
+            -- Health bar
+            if Config.ESP.Health then
+                local pct = math.clamp(hum.Health / math.max(hum.MaxHealth, 1), 0, 1)
+                local barW, barX = 3, cx + w / 2 + 5
+                local barY = by
+                if hitsMenu(barX - 1, barY - 1, barW + 2, h + 2) then
+                    d.healthBG.Visible = false
+                    d.healthFill.Visible = false
+                else
+                    d.healthBG.Size = Vector2.new(barW + 2, h + 2)
+                    d.healthBG.Position = Vector2.new(barX - 1, barY - 1)
+                    d.healthBG.Transparency = transparency
+                    d.healthBG.Visible = true
+                    local fillH = h * pct
+                    d.healthFill.Size = Vector2.new(barW, fillH)
+                    d.healthFill.Position = Vector2.new(barX, barY + (h - fillH))
+                    d.healthFill.Color = Color3.fromRGB(
+                        math.floor(255 * (1 - pct)), math.floor(215 * pct + 40), 80)
+                    d.healthFill.Transparency = transparency
+                    d.healthFill.Visible = true
+                end
+            else
+                d.healthBG.Visible = false
+                d.healthFill.Visible = false
+            end
+
             -- Skeleton
             if Config.ESP.Skeleton and char then
                 if not d.mode then d.mode = detectMode(char) end
-                local conn = nil
+                local conn, useDual = nil, false
                 if d.mode == "R15" then conn = R15_CONN
-                elseif d.mode == "R6" then conn = R6_CONN end
+                elseif d.mode == "R6" then conn = R6_CONN; useDual = true end
 
                 if conn then
                     for i, pair in ipairs(conn) do
-                        local pA = char:FindFirstChild(pair[1])
-                        local pB = char:FindFirstChild(pair[2])
+                        local pA, pB
+                        if useDual then
+                            pA = resolveBone(char, pair[1])
+                            pB = resolveBone(char, pair[2])
+                        else
+                            pA = char:FindFirstChild(pair[1])
+                            pB = char:FindFirstChild(pair[2])
+                        end
                         local line = d.skeleton[i]
                         if pA and pB then
                             local sa = cam:WorldToViewportPoint(pA.Position)
                             local sb = cam:WorldToViewportPoint(pB.Position)
-                            line.From = Vector2.new(sa.X, sa.Y)
-                            line.To = Vector2.new(sb.X, sb.Y)
-                            line.Color = P.Accent
-                            line.Transparency = transparency
-                            line.Visible = true
+                            local lx = math.min(sa.X, sb.X)
+                            local ly = math.min(sa.Y, sb.Y)
+                            local lw = math.abs(sa.X - sb.X)
+                            local lh = math.abs(sa.Y - sb.Y)
+                            if hitsMenu(lx, ly, lw, lh) then
+                                line.Visible = false
+                            else
+                                line.From = Vector2.new(sa.X, sa.Y)
+                                line.To = Vector2.new(sb.X, sb.Y)
+                                line.Color = P.Accent
+                                line.Transparency = transparency
+                                line.Visible = true
+                            end
                         else
                             line.Visible = false
                         end
@@ -1460,12 +1444,17 @@ RunService.RenderStepped:Connect(function(dt)
                     local headPart = char:FindFirstChild("Head")
                     if headPart then
                         local hp = cam:WorldToViewportPoint(headPart.Position)
-                        local headSize = (headPart.Size.Y * 0.5) * 100 / (cam.CFrame.Position - headPart.Position).Magnitude * 10
-                        d.head.Position = Vector2.new(hp.X, hp.Y)
-                        d.head.Radius = math.max(headSize, 4)
-                        d.head.Color = P.Accent
-                        d.head.Transparency = transparency
-                        d.head.Visible = true
+                        local dist3 = (cam.CFrame.Position - headPart.Position).Magnitude
+                        local headR = math.max((headPart.Size.Y * 0.5) * 100 / math.max(dist3, 1) * 1.2, 4)
+                        if hitsMenu(hp.X - headR, hp.Y - headR, headR * 2, headR * 2) then
+                            d.head.Visible = false
+                        else
+                            d.head.Position = Vector2.new(hp.X, hp.Y)
+                            d.head.Radius = headR
+                            d.head.Color = P.Accent
+                            d.head.Transparency = transparency
+                            d.head.Visible = true
+                        end
                     else
                         d.head.Visible = false
                     end
@@ -1478,39 +1467,20 @@ RunService.RenderStepped:Connect(function(dt)
                 d.head.Visible = false
             end
 
-            -- Health bar
-            if Config.ESP.Health then
-                local pct = math.clamp(hum.Health / math.max(hum.MaxHealth, 1), 0, 1)
-                local barW, barX = 3, cx + w / 2 + 5
-                local barY = by
-
-                d.healthBG.Size = Vector2.new(barW + 2, h + 2)
-                d.healthBG.Position = Vector2.new(barX - 1, barY - 1)
-                d.healthBG.Transparency = transparency
-                d.healthBG.Visible = true
-
-                local fillH = h * pct
-                d.healthFill.Size = Vector2.new(barW, fillH)
-                d.healthFill.Position = Vector2.new(barX, barY + (h - fillH))
-                d.healthFill.Color = Color3.fromRGB(
-                    math.floor(255 * (1 - pct)),
-                    math.floor(215 * pct + 40),
-                    80)
-                d.healthFill.Transparency = transparency
-                d.healthFill.Visible = true
-            else
-                d.healthBG.Visible = false
-                d.healthFill.Visible = false
-            end
-
             -- Name
             if Config.ESP.Name then
                 local isTarget = Config.Target == player
-                d.name.Text = isTarget and (player.Name .. "  ◄") or player.Name
-                d.name.Position = Vector2.new(cx, by - 12)
-                d.name.Color = isTarget and P.Danger or Color3.new(1, 1, 1)
-                d.name.Transparency = transparency
-                d.name.Visible = true
+                local txt = isTarget and (player.Name .. "  ◄") or player.Name
+                local nx, ny, nw, nh = textBounds(cx, by - 12, txt, 11)
+                if hitsMenu(nx, ny, nw, nh) then
+                    d.name.Visible = false
+                else
+                    d.name.Text = txt
+                    d.name.Position = Vector2.new(cx, by - 12)
+                    d.name.Color = isTarget and P.Danger or Color3.new(1, 1, 1)
+                    d.name.Transparency = transparency
+                    d.name.Visible = true
+                end
             else
                 d.name.Visible = false
             end
@@ -1518,10 +1488,16 @@ RunService.RenderStepped:Connect(function(dt)
             -- Distance
             if Config.ESP.Distance then
                 local dist = (cam.CFrame.Position - hrp.Position).Magnitude
-                d.dist.Text = math.floor(dist) .. "m"
-                d.dist.Position = Vector2.new(cx, by + h + 2)
-                d.dist.Transparency = transparency
-                d.dist.Visible = true
+                local txt = math.floor(dist) .. "m"
+                local dx, dy, dw, dh = textBounds(cx, by + h + 2, txt, 10)
+                if hitsMenu(dx, dy, dw, dh) then
+                    d.dist.Visible = false
+                else
+                    d.dist.Text = txt
+                    d.dist.Position = Vector2.new(cx, by + h + 2)
+                    d.dist.Transparency = transparency
+                    d.dist.Visible = true
+                end
             else
                 d.dist.Visible = false
             end
@@ -1544,8 +1520,6 @@ AimTab:Slider("FOV Radius", 20, 400, 120, function(v) Config.SilentAim.FOV = v e
 AimTab:Slider("Prediction %", 0, 30, 5, function(v) Config.SilentAim.Prediction = v / 100 end)
 AimTab:Toggle("Wall Check", true, function(v) Config.SilentAim.WallCheck = v end)
 AimTab:Toggle("Show FOV Circle", true, function(v) Config.SilentAim.FOVVisible = v end)
-AimTab:Divider()
-AimTab:Label("Hold the activation key to lock onto the nearest target in FOV.")
 
 local ESPTab = UI:CreateTab("ESP", "▣")
 ESPTab:Section("Rendering")
@@ -1565,24 +1539,24 @@ ESPTab:Toggle("Box Pulse", true, function(v) Config.ESP.Pulse = v end)
 
 local UpdTab = UI:CreateTab("Updates", "✦")
 UpdTab:Section("Changelog")
-UpdTab:Badge("v5  •  current", P.Purple2)
-UpdTab:Label("Rounder UI, purple N logo, ESP visible through menu, delta-time fade.")
+UpdTab:Badge("v6  •  current", P.Purple2)
+UpdTab:Label("Toggle clicks fixed — whole row is now clickable. Sidebar layout spacing corrected.")
+UpdTab:Badge("v5", P.PanelAlt)
+UpdTab:Label("Rounder UI, purple logo, per-element menu occlusion for ESP.")
 UpdTab:Badge("v4", P.PanelAlt)
 UpdTab:Label("Minimize-to-icon, floating launcher, skeleton R6/R15 autodetect.")
-UpdTab:Badge("v3", P.PanelAlt)
-UpdTab:Label("Menu rebuild, avatar card, search bar, section headers.")
 UpdTab:Divider()
 UpdTab:Section("About")
 UpdTab:Label("made by sside")
 UpdTab:Label("NEXUS SUITE — Roblox red team lab tool")
 
-local InfoTab = UI:CreateTab("Keys", "⌘")
-InfoTab:Section("Hotkeys")
-InfoTab:Label("RightShift — toggle menu visibility")
-InfoTab:Label("–  button — collapse to floating icon")
-InfoTab:Label("×  button — close the menu")
-InfoTab:Divider()
-InfoTab:Section("Notes")
-InfoTab:Label("Fire remote name must match the target game. Edit the 'shoot' match string inside the namecall hook after inspecting via remote spy.")
+local KeysTab = UI:CreateTab("Keys", "⌘")
+KeysTab:Section("Hotkeys")
+KeysTab:Label("RightShift — toggle menu visibility")
+KeysTab:Label("–  button — collapse to floating icon")
+KeysTab:Label("×  button — close the menu")
+KeysTab:Divider()
+KeysTab:Section("Notes")
+KeysTab:Label("Fire remote name must match the target game. Edit the 'shoot' match string inside the namecall hook after inspecting via remote spy.")
 
-UI:Notify("Nexus Suite v5 loaded", 3)
+UI:Notify("Nexus Suite v6 loaded", 3)
