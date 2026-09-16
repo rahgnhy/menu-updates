@@ -1,4 +1,4 @@
---[[ NEXUS SUITE v7 — made by sside ]]
+--[[ NEXUS SUITE v7.1 — made by sside ]]
 local unpack = unpack or table.unpack
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -33,13 +33,12 @@ local P = {
 local UI = {}
 
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "NexusUI_v7"
+ScreenGui.Name = "NexusUI_v7_1"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = GUIParent
 
--- === Main window — more rounded ===
 local Main = Instance.new("Frame")
 Main.Name = "Main"
 Main.Size = UDim2.new(0, 740, 0, 480)
@@ -74,7 +73,6 @@ OuterGlow.Position = UDim2.new(0, -40, 0, -40)
 OuterGlow.ZIndex = -1
 OuterGlow.Parent = Main
 
--- Top bar
 local TopBar = Instance.new("Frame")
 TopBar.Size = UDim2.new(1, 0, 0, 50)
 TopBar.BackgroundColor3 = P.PanelAlt
@@ -164,7 +162,7 @@ task.spawn(function()
 end)
 
 local SubTitle = Instance.new("TextLabel")
-SubTitle.Text = "v7"; SubTitle.Font = Enum.Font.GothamMedium; SubTitle.TextSize = 10
+SubTitle.Text = "v7.1"; SubTitle.Font = Enum.Font.GothamMedium; SubTitle.TextSize = 10
 SubTitle.TextColor3 = P.TextDim; SubTitle.BackgroundTransparency = 1
 SubTitle.TextXAlignment = Enum.TextXAlignment.Left
 SubTitle.Size = UDim2.new(0,60,1,0); SubTitle.Position = UDim2.new(0,158,0,0)
@@ -194,7 +192,6 @@ local function makeWinBtn(text, xOff, hoverBg, onClick)
     return b
 end
 
--- Min icon
 local MinIcon = Instance.new("TextButton")
 MinIcon.Name = "MinIcon"; MinIcon.Size = UDim2.new(0,58,0,58)
 MinIcon.Position = UDim2.new(0.5,-29,0.5,-29)
@@ -359,7 +356,6 @@ TabListLayout.Padding = UDim.new(0,4)
 local TabPad = Instance.new("UIPadding", TabHolder)
 TabPad.PaddingTop = UDim.new(0,4); TabPad.PaddingLeft = UDim.new(0,11); TabPad.PaddingRight = UDim.new(0,11)
 
--- Active counter (shifted right so Discord button fits on the left)
 local ActiveCounter = Instance.new("Frame")
 ActiveCounter.Size = UDim2.new(1,-64,0,34); ActiveCounter.Position = UDim2.new(0,53,1,-70)
 ActiveCounter.BackgroundColor3 = P.PanelAlt; ActiveCounter.Parent = Sidebar
@@ -377,51 +373,83 @@ ActiveText.TextXAlignment = Enum.TextXAlignment.Left
 ActiveText.Size = UDim2.new(1,-30,1,0); ActiveText.Position = UDim2.new(0,24,0,0)
 ActiveText.Parent = ActiveCounter
 
--- === Discord button (bottom-left of sidebar) ===
-local DiscordBtn = Instance.new("TextButton")
-DiscordBtn.Name = "DiscordBtn"
-DiscordBtn.Size = UDim2.new(0,34,0,34)
-DiscordBtn.Position = UDim2.new(0,11,1,-70)
-DiscordBtn.BackgroundColor3 = P.PanelAlt
-DiscordBtn.Text = ""
-DiscordBtn.AutoButtonColor = false
-DiscordBtn.Parent = Sidebar
-Instance.new("UICorner", DiscordBtn).CornerRadius = UDim.new(1,0)
+-- === Site button (bottom-left) — opens ssidemoddinghub.space-z.ai ===
+local SiteURL = "https://ssidemoddinghub.space-z.ai/"
 
-local DiscordStroke = Instance.new("UIStroke", DiscordBtn)
-DiscordStroke.Color = P.Purple2
-DiscordStroke.Thickness = 1.5
-DiscordStroke.Transparency = 0.35
+local SiteBtn = Instance.new("TextButton")
+SiteBtn.Name = "SiteBtn"
+SiteBtn.Size = UDim2.new(0,34,0,34)
+SiteBtn.Position = UDim2.new(0,11,1,-70)
+SiteBtn.BackgroundColor3 = P.PanelAlt
+SiteBtn.Text = ""
+SiteBtn.AutoButtonColor = false
+SiteBtn.Parent = Sidebar
+Instance.new("UICorner", SiteBtn).CornerRadius = UDim.new(1,0)
 
-local DiscordIcon = Instance.new("ImageLabel")
-DiscordIcon.Name = "DiscordIcon"
-DiscordIcon.Size = UDim2.new(0,20,0,20)
-DiscordIcon.Position = UDim2.new(0.5,-10,0.5,-10)
-DiscordIcon.BackgroundTransparency = 1
-DiscordIcon.Image = "rbxassetid://787707748"
-DiscordIcon.ImageColor3 = P.Purple1
-DiscordIcon.Parent = DiscordBtn
+local SiteStroke = Instance.new("UIStroke", SiteBtn)
+SiteStroke.Color = P.Purple2
+SiteStroke.Thickness = 1.5
+SiteStroke.Transparency = 0.35
 
-DiscordBtn.MouseEnter:Connect(function()
-    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), {BackgroundColor3=Color3.fromRGB(34,28,50)}):Play()
-    TweenService:Create(DiscordStroke, TweenInfo.new(0.15), {Transparency=0}):Play()
-    TweenService:Create(DiscordIcon, TweenInfo.new(0.15), {ImageColor3=P.AccentSoft}):Play()
+local SiteIcon = Instance.new("ImageLabel")
+SiteIcon.Name = "SiteIcon"
+SiteIcon.Size = UDim2.new(0,20,0,20)
+SiteIcon.Position = UDim2.new(0.5,-10,0.5,-10)
+SiteIcon.BackgroundTransparency = 1
+SiteIcon.Image = "rbxassetid://787707748"
+SiteIcon.ImageColor3 = P.Purple1
+SiteIcon.Parent = SiteBtn
+
+SiteBtn.MouseEnter:Connect(function()
+    TweenService:Create(SiteBtn, TweenInfo.new(0.15), {BackgroundColor3=Color3.fromRGB(34,28,50)}):Play()
+    TweenService:Create(SiteStroke, TweenInfo.new(0.15), {Transparency=0}):Play()
+    TweenService:Create(SiteIcon, TweenInfo.new(0.15), {ImageColor3=P.AccentSoft}):Play()
 end)
-DiscordBtn.MouseLeave:Connect(function()
-    TweenService:Create(DiscordBtn, TweenInfo.new(0.15), {BackgroundColor3=P.PanelAlt}):Play()
-    TweenService:Create(DiscordStroke, TweenInfo.new(0.15), {Transparency=0.35}):Play()
-    TweenService:Create(DiscordIcon, TweenInfo.new(0.15), {ImageColor3=P.Purple1}):Play()
+SiteBtn.MouseLeave:Connect(function()
+    TweenService:Create(SiteBtn, TweenInfo.new(0.15), {BackgroundColor3=P.PanelAlt}):Play()
+    TweenService:Create(SiteStroke, TweenInfo.new(0.15), {Transparency=0.35}):Play()
+    TweenService:Create(SiteIcon, TweenInfo.new(0.15), {ImageColor3=P.Purple1}):Play()
 end)
 
-DiscordBtn.MouseButton1Click:Connect(function()
-    local url = " https://ssidemoddinghub.space-z.ai/ 
-SSIDE Modding Hub"
-    local ok = pcall(function()
-        if setclipboard then setclipboard(url)
-        elseif toclipboard then toclipboard(url)
-        elseif set_clipboard then set_clipboard(url) end
+SiteBtn.MouseButton1Click:Connect(function()
+    local opened = false
+    pcall(function()
+        if setclipboard then setclipboard(SiteURL) end
     end)
-    UI:Notify(ok and "Discord invite copied to clipboard" or "Discord: " .. url, 2.5)
+
+    -- Try common executor open-url functions
+    pcall(function()
+        if request then
+            request({Url = SiteURL, Method = "GET"})
+            opened = true
+        end
+    end)
+    if not opened then
+        pcall(function()
+            if syn and syn.request then
+                syn.request({Url = SiteURL, Method = "GET"})
+                opened = true
+            end
+        end)
+    end
+    if not opened then
+        pcall(function()
+            if http and http.request then
+                http.request({Url = SiteURL, Method = "GET"})
+                opened = true
+            end
+        end)
+    end
+    if not opened then
+        pcall(function()
+            if fluxus and fluxus.request then
+                fluxus.request({Url = SiteURL, Method = "GET"})
+                opened = true
+            end
+        end)
+    end
+
+    UI:Notify("Link copied: ssidemoddinghub.space-z.ai", 2.5)
 end)
 
 local Footer = Instance.new("TextLabel")
@@ -573,7 +601,6 @@ function UI:CreateTab(name, icon)
         return D
     end
 
-    -- === TOGGLE — the interactive surface IS a TextButton ===
     function Elements:Toggle(text, default, callback)
         local Holder = Instance.new("TextButton")
         Holder.Name = "Toggle_"..text
@@ -637,7 +664,6 @@ function UI:CreateTab(name, icon)
         return Holder
     end
 
-    -- === SLIDER — bar itself is a TextButton ===
     function Elements:Slider(text, min, max, default, callback)
         local Holder = Instance.new("Frame")
         Holder.Name = "Slider_"..text
@@ -663,7 +689,6 @@ function UI:CreateTab(name, icon)
         ValueBubble.Size = UDim2.new(0,60,0,16); ValueBubble.Position = UDim2.new(1,-76,0,8)
         ValueBubble.Parent = Holder
 
-        -- Bar is the interactive TextButton
         local Bar = Instance.new("TextButton")
         Bar.Size = UDim2.new(1,-32,0,20); Bar.Position = UDim2.new(0,16,0,27)
         Bar.BackgroundTransparency = 1
@@ -814,7 +839,6 @@ do
     end)
 end
 
--- Target info card
 local InfoCard = Instance.new("Frame")
 InfoCard.Size = UDim2.new(0,220,0,92); InfoCard.Position = UDim2.new(1,-232,1,-104)
 InfoCard.BackgroundColor3 = P.Panel; InfoCard.Visible = false; InfoCard.Parent = ScreenGui
@@ -899,7 +923,6 @@ function UI:Notify(text, duration)
     end)
 end
 
--- Target selection
 local function getClosestTarget(fov)
     local cam = workspace.CurrentCamera
     if not cam then return nil end
@@ -984,7 +1007,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- ESP
 local ESPData = {}
 local FADE_SPEED = 10
 
@@ -1265,7 +1287,6 @@ RunService.RenderStepped:Connect(function(dt)
     end
 end)
 
--- Build menu
 local AimTab = UI:CreateTab("Silent Aim", "◎")
 AimTab:Section("Core")
 AimTab:Toggle("Enable Silent Aim", false, function(v)
@@ -1297,12 +1318,12 @@ ESPTab:Toggle("Box Pulse", true, function(v) Config.ESP.Pulse = v end)
 
 local UpdTab = UI:CreateTab("Updates", "✦")
 UpdTab:Section("Changelog")
-UpdTab:Badge("v7  •  current", P.Purple2)
-UpdTab:Label("Toggles rebuilt as TextButton surfaces. Menu corner radius bumped. Discord button added.")
+UpdTab:Badge("v7.1  •  current", P.Purple2)
+UpdTab:Label("Bottom-left button now opens ssidemoddinghub.space-z.ai.")
+UpdTab:Badge("v7", P.PanelAlt)
+UpdTab:Label("Toggles rebuilt as TextButton surfaces, rounded corners, site button added.")
 UpdTab:Badge("v6", P.PanelAlt)
 UpdTab:Label("Toggle clicks fixed, sidebar layout spacing corrected.")
-UpdTab:Badge("v5", P.PanelAlt)
-UpdTab:Label("Rounder UI, purple logo, per-element menu occlusion.")
 UpdTab:Divider()
 UpdTab:Section("About")
 UpdTab:Label("made by sside")
@@ -1317,4 +1338,4 @@ KeysTab:Divider()
 KeysTab:Section("Notes")
 KeysTab:Label("Fire remote name must match the target game.")
 
-UI:Notify("Nexus Suite v7 loaded", 3)
+UI:Notify("Nexus Suite v7.1 loaded", 3)
